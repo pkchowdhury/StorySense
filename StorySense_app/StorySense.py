@@ -7,12 +7,32 @@ import streamlit as st
 import json
 import pandas as pd
 from pathlib import Path
+import base64
 
-# Page config
+# Set up page configuration
+logo_path = Path(__file__).parent / "logo.png"
+
 st.set_page_config(
     page_title="StorySense App",
-    page_icon="📝",
+    page_icon=str(logo_path),
     layout="wide"
+)
+
+def load_logo(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+logo_base64 = load_logo(logo_path)
+
+# Custom title bar with logo
+st.markdown(
+    f"""
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom:25px;">
+        <img src="data:image/png;base64,{logo_base64}" width="150">
+        <h1 style="margin:0;">StorySense App</h1>
+    </div>
+    """,
+    unsafe_allow_html=True
 )
 
 class RatingApp:
@@ -213,7 +233,7 @@ class RatingApp:
     def run(self):
         """Main app logic"""
         
-        st.title("📝 User Story Quality Evaluation")
+        st.subheader("User Story Quality Evaluation")
         st.markdown("Compare and rate story refinements from two different approaches")
         
         # Sidebar
